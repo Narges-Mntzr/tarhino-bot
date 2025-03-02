@@ -64,7 +64,7 @@ class Database:
     @classmethod
     def insert_user(cls, user):
         sql = """INSERT INTO bot_users (user_id, name, phone_number, is_admin, font, color1, color2, color_text)
-                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
         cursor = cls.connection.cursor()
         cursor.execute(
             sql,

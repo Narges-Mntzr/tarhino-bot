@@ -24,7 +24,7 @@ def image_places_handlers(bot):
             await message.reply(texts.invalid_value)
             return
 
-        grid, image_cnt = generate_image_grid(f"./images/places/{place_path}")
+        grid, image_cnt = generate_image_grid(f"./images/{place_path}")
         await message.reply_photo(photo=grid)
 
         await message.reply(
@@ -43,6 +43,6 @@ def image_places_handlers(bot):
             await message.reply(texts.invalid_value)
             return
 
-        image = image_to_bytes(f"./images/places/{place_path}/{img_number}.jpg")
+        image = image_to_bytes(f"./images/{place_path}/{img_number}.jpg")
         await message.reply_photo(photo=image, reply_markup=keyboards.main_menu)
         message.author.set_state("MAIN")

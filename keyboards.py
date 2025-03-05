@@ -68,3 +68,6 @@ def generate_image_keyboard(n, prefix):
         ],
         ["بازگشت به منو"],
     )
+
+
+default = ReplyKeyboard(["مقدار پیش‌فرض"])

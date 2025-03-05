@@ -3,9 +3,11 @@ from balethon.objects import Message, ReplyKeyboardRemove
 
 import texts
 import keyboards
+from config import logging
 from database import Database
 from services import (
     convert_persian_to_english_digits,
+    get_full_name,
     is_valid_phone_number,
 )
 
@@ -17,13 +19,28 @@ def register_handlers(bot):
 
     @bot.on_message(conditions.at_state("BEFORE_REG") & conditions.regex("^ثبت‌نام$"))
     async def before_reg2_state(message: Message):
-        await message.reply(texts.give_name, ReplyKeyboardRemove())
+        logging.error(f"{message.author}")
+        if message.author.first_name or message.author.last_name:
+            await message.reply(
+                texts.give_name_with_default.format(
+                    name=get_full_name(
+                        message.author.first_name, message.author.last_name
+                    )
+                ),
+                keyboards.default,
+            )
+        else:
+            await message.reply(texts.give_name, ReplyKeyboardRemove())
         message.author.set_state("NAME")
 
     @bot.on_message(conditions.at_state("NAME"))
     async def name_state(message: Message):
         user = Database.load_user(message.author.id)
-        user.name = message.text
+        user.name = (
+            message.text
+            if message.text != "مقدار پیش‌فرض"
+            else get_full_name(message.author.first_name, message.author.last_name)
+        )
         Database.save_user(user)
 
         if user.phone_number is None:

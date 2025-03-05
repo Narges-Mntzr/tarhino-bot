@@ -274,3 +274,11 @@ async def download_photo_as_bytes(photo_file_path):
         raise Exception(
             f"Failed to download photo: {response.status_code} - {response.text}"
         )
+
+
+def get_full_name(first_name: str = "", last_name: str = "") -> str:
+    if first_name and last_name:
+        return f"{first_name} {last_name}"
+    elif first_name or last_name:
+        return first_name or last_name
+    return ""

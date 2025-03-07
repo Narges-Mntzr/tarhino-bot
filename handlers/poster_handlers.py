@@ -39,7 +39,7 @@ def poster_handlers(bot):
         poster.template = template_name
         Database.save_poster(poster)
 
-        await message.reply(texts.orientation, reply_markup=keyboards.orientation_menu)
+        await message.reply(texts.initial_image, reply_markup=keyboards.return_menu)
         message.author.set_state("INITIAL-IMAGE")
 
     @bot.on_message(conditions.at_state("INITIAL-IMAGE"))

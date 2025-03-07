@@ -40,15 +40,6 @@ def poster_handlers(bot):
         Database.save_poster(poster)
 
         await message.reply(texts.orientation, reply_markup=keyboards.orientation_menu)
-        message.author.set_state("ORIENTATION")
-
-    @bot.on_message(conditions.at_state("ORIENTATION"))
-    async def orientation_state(message: Message):
-        poster = Database.load_posters_by_user(user_id=message.author.id)
-        poster.orientation = message.text
-        Database.save_poster(poster)
-
-        await message.reply(texts.initial_image, reply_markup=keyboards.return_menu)
         message.author.set_state("INITIAL-IMAGE")
 
     @bot.on_message(conditions.at_state("INITIAL-IMAGE"))

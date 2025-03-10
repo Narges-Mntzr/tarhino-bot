@@ -16,6 +16,13 @@ from visualize import process_poster
 def poster_handlers(bot):
     @bot.on_message(conditions.at_state("START") & conditions.regex("^عکس نوشت$"))
     async def start_poster_state(message: Message):
+        await message.reply(
+            texts.mode_selection, reply_markup=keyboards.mode_selection_menu
+        )
+        message.author.set_state("MODE-SELECTION")
+
+    @bot.on_message(conditions.at_state("MODE-SELECTION") & conditions.regex("^تولید عکس‌نوشت تکی$"))
+    async def planing_state(message: Message):
         if not is_template_exist():
             await message.reply("هیچ طرحی موجود نیست.")
             return

@@ -131,3 +131,7 @@ poster_details = """
 جهت: {orientation}
 خروجی: {output_image}
 """.strip()
+
+mode_selection = """ روش مدنظر خود را انتخاب کنید."""
+
+

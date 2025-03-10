@@ -42,6 +42,12 @@ start_menu = ReplyKeyboard(
 
 return_menu = ReplyKeyboard(["بازگشت به منو"])
 
+mode_selection_menu = ReplyKeyboard(
+    ["تولید عکس‌نوشت تکی"],
+    ["تولید عکس‌نوشت دسته‌ای"],
+    ["بازگشت به منو"],
+)
+
 template_menu = ReplyKeyboard(
     *[[f"طرح {name}"] for name in get_all_template_names()], ["بازگشت به منو"]
 )

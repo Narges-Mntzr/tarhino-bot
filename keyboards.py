@@ -48,6 +48,13 @@ mode_selection_menu = ReplyKeyboard(
     ["بازگشت به منو"],
 )
 
+type_selection_menu = ReplyKeyboard(
+    ["ساده"],
+    ["کارت‌پستال"],
+    ["دعوت‌نامه"],
+    ["بازگشت به منو"],
+)
+
 template_menu = ReplyKeyboard(
     *[[f"طرح {name}"] for name in get_all_template_names()], ["بازگشت به منو"]
 )

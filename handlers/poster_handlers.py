@@ -22,6 +22,13 @@ def poster_handlers(bot):
         message.author.set_state("MODE-SELECTION")
 
     @bot.on_message(conditions.at_state("MODE-SELECTION") & conditions.regex("^تولید عکس‌نوشت تکی$"))
+    async def template_selection1_state(message: Message):
+        await message.reply(
+            texts.type_selection, reply_markup=keyboards.type_selection_menu
+        )
+        message.author.set_state("TYPE-SELECTION")
+
+    @bot.on_message(conditions.at_state("TYPE-SELECTION") & conditions.regex("^ساده"))
     async def planing_state(message: Message):
         if not is_template_exist():
             await message.reply("هیچ طرحی موجود نیست.")
@@ -39,7 +46,7 @@ def poster_handlers(bot):
         message.author.set_state("TEMPLATE-SELECTION")
 
     @bot.on_message(conditions.at_state("TEMPLATE-SELECTION"))
-    async def template_selection_state(message: Message):
+    async def template_selection2_state(message: Message):
         template_name = message.text.split()[-1]
 
         poster = Database.load_posters_by_user(user_id=message.author.id)

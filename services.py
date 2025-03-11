@@ -188,7 +188,7 @@ def generate_image_grid(image_dir, max_images_per_page=8, columns=2):
     return image_bytes.getvalue(), len(image_files)
 
 
-def generate_template_grid(image_dir, new_colors, max_images_per_page=8, columns=2):
+def generate_template_grid(image_dir, new_colors=None, max_images_per_page=8, columns=2):
     image_files = [
         f for f in os.listdir(image_dir) if os.path.isdir(os.path.join(image_dir, f))
     ]
@@ -221,11 +221,16 @@ def generate_template_grid(image_dir, new_colors, max_images_per_page=8, columns
             image_file = image_files[idx]
 
             template_image_path = os.path.join(image_dir, f"{image_file}/bg.png")
-            color_path = os.path.join(image_dir, f"{image_file}/colors.txt")
-            old_colors = read_colors_from_file(color_path)
-            modified_image = replace_colors(template_image_path, old_colors, new_colors)
+            if new_colors:
+                color_path = os.path.join(image_dir, f"{image_file}/colors.txt")
+                old_colors = read_colors_from_file(color_path)
+                modified_image = replace_colors(template_image_path, old_colors, new_colors)
 
-            img = Image.fromarray(cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB))
+                img = Image.fromarray(cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB))
+            else:
+                # Load the original image if new_colors is None
+                img = Image.open(template_image_path).convert("RGB")
+
             img = img.resize(image_size)
 
             img.putalpha(255)

@@ -4,7 +4,11 @@ import logging
 
 logging.basicConfig(level=logging.ERROR)
 
-TEMPLATE_PATH = "./templates/basic"
+TEMPLATE_PATH = "./templates/"
+BASIC_TEMPLATE_PATH = f'{TEMPLATE_PATH}/basic'
+POSTCARD_TEMPLATE_PATH = f'{TEMPLATE_PATH}/postcard'
+INVITATION_TEMPLATE_PATH = f'{TEMPLATE_PATH}/postcard'
+
 FONT_PATH = "./fonts"
 
 load_dotenv()

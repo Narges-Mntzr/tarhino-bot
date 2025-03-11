@@ -60,7 +60,7 @@ def poster_handlers(bot):
         )
         message.author.set_state("TEMPLATE-SELECTION2")
 
-    @bot.on_message(conditions.at_state("TYPE-SELECTION") & conditions.regex("^کارت‌پستال"))
+    @bot.on_message(conditions.at_state("TYPE-SELECTION") & conditions.regex("^دعوت‌نامه"))
     async def type_selection_state3(message: Message):
         if not is_template_exist():
             await message.reply("هیچ طرحی موجود نیست.")

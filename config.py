@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.ERROR)
 TEMPLATE_PATH = "./templates/"
 BASIC_TEMPLATE_PATH = f'{TEMPLATE_PATH}/basic'
 POSTCARD_TEMPLATE_PATH = f'{TEMPLATE_PATH}/postcard'
-INVITATION_TEMPLATE_PATH = f'{TEMPLATE_PATH}/postcard'
+INVITATION_TEMPLATE_PATH = f'{TEMPLATE_PATH}/invitation'
 
 FONT_PATH = "./fonts"
 

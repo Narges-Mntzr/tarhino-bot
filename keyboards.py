@@ -55,10 +55,6 @@ type_selection_menu = ReplyKeyboard(
     ["بازگشت به منو"],
 )
 
-template_menu = ReplyKeyboard(
-    *[[f"طرح {name}"] for name in get_all_template_names()], ["بازگشت به منو"]
-)
-
 places = ReplyKeyboard(*[[dept] for dept in config.PLACES], ["بازگشت به منو"])
 
 sub_places = {
@@ -71,6 +67,11 @@ orientation_menu = ReplyKeyboard(
     ["عمودی"],
     ["بازگشت به منو"],
 )
+
+def generate_template_keyboard(path):
+    return ReplyKeyboard(
+    *[[f"طرح {name}"] for name in get_all_template_names(path)], ["بازگشت به منو"])
+
 
 
 def generate_image_keyboard(n, prefix):

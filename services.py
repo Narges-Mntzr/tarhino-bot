@@ -104,11 +104,11 @@ def is_valid_hex_color(hex_color: str):
     return True
 
 
-def get_all_template_names():
+def get_all_template_names(path):
     templates = [
         folder_name
-        for folder_name in os.listdir(config.TEMPLATE_PATH)
-        if os.path.isdir(os.path.join(config.TEMPLATE_PATH, folder_name))
+        for folder_name in os.listdir(path)
+        if os.path.isdir(os.path.join(path, folder_name))
     ]
 
     templates.sort()

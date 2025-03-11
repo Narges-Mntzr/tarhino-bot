@@ -41,7 +41,7 @@ def poster_handlers(bot):
         await message.reply_photo(photo=template_grid)
 
         await message.reply(
-            texts.template_selection, reply_markup=keyboards.template_menu
+            texts.template_selection, reply_markup=keyboards.generate_template_keyboard(config.BASIC_TEMPLATE_PATH)
         )
         message.author.set_state("TEMPLATE-SELECTION")
 
@@ -56,7 +56,7 @@ def poster_handlers(bot):
         await message.reply_photo(photo=template_grid)
 
         await message.reply(
-            texts.template_selection, reply_markup=keyboards.template_menu
+            texts.template_selection, reply_markup=keyboards.generate_template_keyboard(config.POSTCARD_TEMPLATE_PATH)
         )
         message.author.set_state("TEMPLATE-SELECTION2")
 
@@ -71,7 +71,7 @@ def poster_handlers(bot):
         await message.reply_photo(photo=template_grid)
 
         await message.reply(
-            texts.template_selection, reply_markup=keyboards.template_menu
+            texts.template_selection, reply_markup=keyboards.generate_template_keyboard(config.INVITATION_TEMPLATE_PATH)
         )
         message.author.set_state("TEMPLATE-SELECTION2")    
 

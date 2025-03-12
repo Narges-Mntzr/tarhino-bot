@@ -92,7 +92,7 @@ def poster_handlers(bot):
         template_name = message.text.split()[-1]
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
-        poster.template = f'{poster.template}{template_name}'
+        poster.template = f'{poster.template}/{template_name}'
         Database.save_poster(poster)
 
         await message.reply(texts.heading1)
@@ -104,7 +104,7 @@ def poster_handlers(bot):
         template_name = message.text.split()[-1]
         await message.reply(template_name)
         poster = Database.load_posters_by_user(user_id=message.author.id)
-        poster.template = f'{poster.template}{template_name}'
+        poster.template = f'{poster.template}/{template_name}'
         Database.save_poster(poster)
 
         await message.reply(texts.initial_image, reply_markup=keyboards.return_menu)

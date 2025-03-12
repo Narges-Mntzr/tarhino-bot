@@ -147,7 +147,7 @@ def process_poster(poster, photo_bytes, is_persian=True):
     # Validate required attributes
 
     # Construct paths dynamically
-    template_folder = os.path.join(config.TEMPLATE_PATH, poster.template)
+    template_folder = poster.template
     template_image_path = os.path.join(template_folder, "bg.png")
     coordinates_path = os.path.join(template_folder, "coordinates.txt")
     color_path = os.path.join(template_folder, "colors.txt")

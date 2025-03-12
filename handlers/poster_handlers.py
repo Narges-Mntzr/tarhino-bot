@@ -35,6 +35,11 @@ def poster_handlers(bot):
             return
 
         user = Database.load_user(message.author.id)
+
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster.template = config.BASIC_TEMPLATE_PATH
+        Database.save_poster(poster)
+
         template_grid = generate_template_grid(
             image_dir=config.BASIC_TEMPLATE_PATH, new_colors=[user.color1, user.color2]
         )
@@ -51,7 +56,10 @@ def poster_handlers(bot):
             await message.reply("هیچ طرحی موجود نیست.")
             return
 
-        user = Database.load_user(message.author.id)
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster.template = config.POSTCARD_TEMPLATE_PATH
+        Database.save_poster(poster)
+
         template_grid = generate_template_grid(image_dir=config.POSTCARD_TEMPLATE_PATH)
         await message.reply_photo(photo=template_grid)
 
@@ -66,7 +74,10 @@ def poster_handlers(bot):
             await message.reply("هیچ طرحی موجود نیست.")
             return
 
-        user = Database.load_user(message.author.id)
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster.template = config.INVITATION_TEMPLATE_PATH
+        Database.save_poster(poster)
+
         template_grid = generate_template_grid(image_dir=config.INVITATION_TEMPLATE_PATH)
         await message.reply_photo(photo=template_grid)
 
@@ -77,11 +88,11 @@ def poster_handlers(bot):
 
 
     @bot.on_message(conditions.at_state("TEMPLATE-SELECTION2"))
-    async def template_selection_state(message: Message):
+    async def template_selection_state2(message: Message):
         template_name = message.text.split()[-1]
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
-        poster.template = template_name
+        poster.template = f'{poster.template}/{template_name}'
         Database.save_poster(poster)
 
         await message.reply(texts.heading1)
@@ -93,7 +104,7 @@ def poster_handlers(bot):
         template_name = message.text.split()[-1]
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
-        poster.template = template_name
+        poster.template = f'{poster.template}/{template_name}'
         Database.save_poster(poster)
 
         await message.reply(texts.initial_image, reply_markup=keyboards.return_menu)

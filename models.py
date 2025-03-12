@@ -77,7 +77,6 @@ class Poster:
             [
                 self.title is not None,
                 self.message_text is not None,
-                self.initial_image is not None,
                 self.output_image is not None,
             ]
         )

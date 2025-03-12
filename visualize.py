@@ -143,7 +143,7 @@ def add_elements(
     return image_bytes
 
 
-def process_poster(poster, photo_bytes, is_persian=True):
+def process_poster(poster, photo_bytes=None, is_persian=True):
     # Validate required attributes
 
     # Construct paths dynamically
@@ -207,6 +207,51 @@ def process_poster(poster, photo_bytes, is_persian=True):
         text_boxes=[text_box_1, text_box_2],
         text_values=[poster.title, poster.message_text],
         text_color=[hex_to_rgb(poster.color2), hex_to_rgb(poster.text_color)],
+        is_persian=is_persian,
+        font_path=font_path,
+        bold_font_path=bold_font_path,
+    )
+
+    return final_image
+
+def process_poster_without_image(poster, is_persian=True):
+    # Validate required attributes
+
+    # Construct paths dynamically
+    template_folder = poster.template
+    template_image_path = os.path.join(template_folder, "bg.png")
+    coordinates_path = os.path.join(template_folder, "coordinates.txt")
+
+    # Validate file existence
+    if not os.path.exists(template_image_path):
+        raise FileNotFoundError(f"Template background not found at {template_image_path}")
+
+    if not os.path.exists(coordinates_path):
+        raise FileNotFoundError(f"Coordinates file not found at {coordinates_path}")
+
+    # Read coordinate boxes
+    boxes = read_coordinates(coordinates_path)
+    if len(boxes) < 2:  # Only text boxes are needed now
+        raise ValueError("Invalid coordinate file! Ensure it has at least 2 bounding boxes.")
+
+    text_box_1, text_box_2 = boxes[0], boxes[1]
+
+    # Load font file dynamically
+    font_path = os.path.join(config.FONT_PATH, f"{poster.font}.ttf")
+    bold_font_path = os.path.join(config.FONT_PATH, f"{poster.font}-Bold.ttf")
+
+    if not os.path.exists(font_path) or not os.path.exists(bold_font_path):
+        raise FileNotFoundError(f"Font file not found at {font_path}")
+
+    # Load the template image as it is (no color replacement)
+    modified_image = cv2.imread(template_image_path, cv2.IMREAD_COLOR)
+
+    # Add text elements
+    final_image = add_elements(
+        image=modified_image,
+        text_boxes=[text_box_1, text_box_2],
+        text_values=[poster.title, poster.message_text],
+        text_color=[hex_to_rgb(poster.text_color), hex_to_rgb(poster.text_color)],  # Use the same text color
         is_persian=is_persian,
         font_path=font_path,
         bold_font_path=bold_font_path,

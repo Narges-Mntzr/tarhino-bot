@@ -10,7 +10,7 @@ from services import (
     download_photo_as_bytes,
     generate_template_grid,
 )
-from visualize import process_poster
+from visualize import process_poster, process_poster_without_image
 
 
 def poster_handlers(bot):
@@ -102,7 +102,6 @@ def poster_handlers(bot):
     @bot.on_message(conditions.at_state("TEMPLATE-SELECTION"))
     async def template_selection_state(message: Message):
         template_name = message.text.split()[-1]
-        await message.reply(template_name)
         poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.template = f'{poster.template}/{template_name}'
         Database.save_poster(poster)
@@ -142,13 +141,16 @@ def poster_handlers(bot):
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.message_text = heading2
-        # await message.reply(f'{poster.title} {poster.template}')
 
-        photo_file = await message.client.get_file(poster.initial_image)
-        photo_bytes = await download_photo_as_bytes(photo_file.path)
+        if poster.initial_image:
+            photo_file = await message.client.get_file(poster.initial_image)
+            photo_bytes = await download_photo_as_bytes(photo_file.path)
 
         try:
-            final_bytes = process_poster(poster, photo_bytes)
+            if poster.initial_image:
+                final_bytes = process_poster(poster, photo_bytes)
+            else:
+                final_bytes = process_poster_without_image(poster)
 
             uploaded_photo = await message.reply_photo(final_bytes)
             await message.reply_document(

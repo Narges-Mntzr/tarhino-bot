@@ -102,7 +102,7 @@ def poster_handlers(bot):
     @bot.on_message(conditions.at_state("TEMPLATE-SELECTION"))
     async def template_selection_state(message: Message):
         template_name = message.text.split()[-1]
-
+        await message.reply(template_name)
         poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.template = f'{poster.template}{template_name}'
         Database.save_poster(poster)

@@ -84,22 +84,8 @@ def poster_handlers(bot):
         poster.template = template_name
         Database.save_poster(poster)
 
-        await message.reply(texts.initial_image, reply_markup=keyboards.return_menu)
-        message.author.set_state("INITIAL-IMAGE")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        await message.reply(texts.heading1)
+        message.author.set_state("HEADING1")
 
 
     @bot.on_message(conditions.at_state("TEMPLATE-SELECTION"))

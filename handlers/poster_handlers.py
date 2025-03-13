@@ -152,6 +152,7 @@ def poster_handlers(bot):
             photo_bytes = await download_photo_as_bytes(photo_file.path)
 
         poster.text_color = define_text_color(poster.template)
+        await message.reply(poster.text_color)
         try:
             if poster.initial_image:
                 final_bytes = process_poster(poster, photo_bytes)

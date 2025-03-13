@@ -70,7 +70,7 @@ def add_elements(
         x1, y2 = box[0]
         x2, y1 = box[1]
 
-        font_size_small = 30
+        font_size_small = 40
         font_size_large = 50
 
         font_size = font_size_small if i == 0 else font_size_large

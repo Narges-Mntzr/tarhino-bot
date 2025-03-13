@@ -299,7 +299,7 @@ def get_poster_type(template):
 
 def define_text_color(template):
     poster_type = get_poster_type(template)
-    color_path = os.path.join(template, f"{template}/colors.txt")
+    color_path = os.path.join(template, "colors.txt")
     colors = read_colors_from_file(color_path)
     if poster_type != "basic":
         return colors[0]

@@ -96,7 +96,8 @@ def poster_handlers(bot):
         poster.template = f'{poster.template}/{template_name}'
         Database.save_poster(poster)
 
-        await message.reply(texts.heading1)
+        poster_type = get_poster_type(poster.template)
+        await message.reply(texts.generate_heading1_message(poster_type))
         message.author.set_state("HEADING1")
 
 

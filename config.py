@@ -4,6 +4,12 @@ import logging
 
 logging.basicConfig(level=logging.ERROR)
 
+SUPPORTED_POSTER_TYPES = [
+    "basic",
+    "postcard",
+    "invitation"
+]
+
 TEMPLATE_PATH = "./templates/"
 BASIC_TEMPLATE_PATH = f'{TEMPLATE_PATH}basic'
 POSTCARD_TEMPLATE_PATH = f'{TEMPLATE_PATH}postcard'

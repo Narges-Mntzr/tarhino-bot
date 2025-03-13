@@ -9,6 +9,7 @@ from services import (
     is_template_exist,
     download_photo_as_bytes,
     generate_template_grid,
+    get_poster_type
 )
 from visualize import process_poster, process_poster_without_image
 
@@ -115,29 +116,31 @@ def poster_handlers(bot):
         poster.initial_image = message.photo[-1].id
         Database.save_poster(poster)
 
-        await message.reply(texts.heading1)
+        poster_type = get_poster_type(poster.template)
+        await message.reply(texts.generate_heading1_message(poster_type))
         message.author.set_state("HEADING1")
 
     @bot.on_message(conditions.at_state("HEADING1"))
     async def heading1_state(message: Message):
         heading1 = message.text
-        if len(heading1.split()) > 10:
-            await message.reply(texts.not_valid_length)
-            return
+        # if len(heading1.split()) > 10:
+        #     await message.reply(texts.not_valid_length)
+        #     return
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.title = message.text
         Database.save_poster(poster)
 
-        await message.reply(texts.heading2)
+        poster_type = get_poster_type(poster.template)
+        await message.reply(texts.generate_heading2_message(poster_type))
         message.author.set_state("FINAL-STATE")
 
     @bot.on_message(conditions.at_state("FINAL-STATE"))
     async def poster_generation_state(message: Message):
         heading2 = message.text
-        if len(heading2.split()) > 20:
-            await message.reply(texts.not_valid_length)
-            return
+        # if len(heading2.split()) > 20:
+        #     await message.reply(texts.not_valid_length)
+        #     return
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.message_text = heading2

@@ -5,6 +5,7 @@ import os
 import re
 import requests
 from PIL import Image, ImageDraw, ImageFont
+from config import SUPPORTED_POSTER_TYPES
 
 from visualize import replace_colors, read_colors_from_file
 
@@ -287,3 +288,10 @@ def get_full_name(first_name: str = "", last_name: str = "") -> str:
     elif first_name or last_name:
         return first_name or last_name
     return ""
+
+def get_poster_type(template):
+    template = template.lower()
+    for poster_type in SUPPORTED_POSTER_TYPES:
+        if poster_type in template:
+            return poster_type
+    return None

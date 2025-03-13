@@ -110,10 +110,6 @@ orientation = "جهت مدنظر خود را برای طرح انتخاب کنی
 
 initial_image = "تصویری که قصد دارید در پوستر قرار گیرد را ارسال کنید."
 
-heading1 = "عنوان متن را وارد کنید: (حداکثر ۱۰ کلمه) "
-
-heading2 = "متن خبر را وارد کنید: (حداکثر ۲۰ کلمه)"
-
 not_valid_length = """
 طول عبارت وارد شده طولانی‌تر از مقدار مجاز است.
 """.strip()
@@ -137,3 +133,18 @@ mode_selection = """ روش مدنظر خود را انتخاب کنید."""
 type_selection = """از بین دسته طرح های زیر انتخاب کنید:"""
 
 
+def generate_heading1_message(poster_type):
+    if poster_type == "basic":
+        return "عنوان متن را وارد کنید: (حداکثر ۱۰ کلمه) "
+    if poster_type == "postcard":
+        return "نام گیرنده کارت‌پستال را وارد کنید: "
+    if poster_type == "invitation":
+        return "نام گیرنده دعوت‌نامه را وارد کنید: "
+    
+def generate_heading2_message(poster_type):
+    if poster_type == "basic":
+        return "متن اصلی را وارد کنید: (حداکثر ۲۰ کلمه)"
+    if poster_type == "postcard":
+        return " متن کارت‌پستال را وارد کنید: "
+    if poster_type == "invitation":
+        return " متن دعوت‌نامه را وارد کنید: "

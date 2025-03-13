@@ -144,8 +144,6 @@ def add_elements(
 
 
 def process_poster(poster, photo_bytes=None, is_persian=True):
-    # Validate required attributes
-
     # Construct paths dynamically
     template_folder = poster.template
     template_image_path = os.path.join(template_folder, "bg.png")
@@ -215,8 +213,6 @@ def process_poster(poster, photo_bytes=None, is_persian=True):
     return final_image
 
 def process_poster_without_image(poster, is_persian=True):
-    # Validate required attributes
-
     # Construct paths dynamically
     template_folder = poster.template
     template_image_path = os.path.join(template_folder, "bg.png")

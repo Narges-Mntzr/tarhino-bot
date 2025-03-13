@@ -234,7 +234,7 @@ def process_poster_without_image(poster, is_persian=True):
     if len(boxes) < 2:  # Only text boxes are needed now
         raise ValueError("Invalid coordinate file! Ensure it has at least 2 bounding boxes.")
 
-    text_box_1, text_box_2 = boxes[0], boxes[1]
+    text_box_1, text_box_2 = boxes[1], boxes[0]
 
     # Load font file dynamically
     font_path = os.path.join(config.FONT_PATH, f"{poster.font}.ttf")

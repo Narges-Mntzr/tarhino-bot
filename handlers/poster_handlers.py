@@ -9,7 +9,8 @@ from services import (
     is_template_exist,
     download_photo_as_bytes,
     generate_template_grid,
-    get_poster_type
+    get_poster_type,
+    define_text_color
 )
 from visualize import process_poster, process_poster_without_image
 
@@ -150,6 +151,7 @@ def poster_handlers(bot):
             photo_file = await message.client.get_file(poster.initial_image)
             photo_bytes = await download_photo_as_bytes(photo_file.path)
 
+        poster.text_color = define_text_color(poster.template)
         try:
             if poster.initial_image:
                 final_bytes = process_poster(poster, photo_bytes)
@@ -166,20 +168,3 @@ def poster_handlers(bot):
             Database.save_poster(poster)
         except Exception as e:
             await message.reply(texts.error.format(error_msg=str(e)))
-
-    @bot.on_message(conditions.at_state("TYPE-SELECTION") & conditions.regex("^کارت‌پستال"))
-    async def planing_state(message: Message):
-        if not is_template_exist():
-            await message.reply("هیچ طرحی موجود نیست.")
-            return
-
-        user = Database.load_user(message.author.id)
-        template_grid = generate_template_grid(
-            image_dir=config.POSTCARD_TEMPLATE_PATH
-        )
-        await message.reply_photo(photo=template_grid)
-
-        await message.reply(
-            texts.template_selection, reply_markup=keyboards.template_menu
-        )
-        message.author.set_state("TEMPLATE-SELECTION")

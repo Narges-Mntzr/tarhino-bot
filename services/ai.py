@@ -1,10 +1,5 @@
-import dns.resolver
 from google import genai
 from config import GEMINI_API_TOKEN
-
-# Set shecan
-dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)
-dns.resolver.default_resolver.nameservers = ["178.22.122.100", "185.51.200.2"]
 
 client = genai.Client(api_key=GEMINI_API_TOKEN)
 

@@ -10,6 +10,7 @@ import keyboards
 from handlers.register_handlers import register_handlers
 from handlers.setting_handlers import setting_handlers
 from handlers.poster_handlers import poster_handlers
+from handlers.poster_handlers_group import poster_handlers_group
 from handlers.image_places_handlers import image_places_handlers
 from database import Database
 
@@ -65,6 +66,7 @@ async def none_state(message: Message):
 register_handlers(bot)
 setting_handlers(bot)
 poster_handlers(bot)
+poster_handlers_group(bot)
 image_places_handlers(bot)
 
 bot.run()

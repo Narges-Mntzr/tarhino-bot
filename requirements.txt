@@ -1,5 +1,5 @@
 balethon
-google-generativeai
+google-genai
 requests
 numpy==1.26.0           
 opencv-python==4.8.1.78  

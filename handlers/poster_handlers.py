@@ -153,7 +153,7 @@ def poster_handlers(bot):
 
         poster.text_color = define_text_color(poster.template)
         try:
-            if poster.initial_image:
+            if get_poster_type(poster.template) == "basic":
                 final_bytes = process_poster(poster, photo_bytes)
             else:
                 final_bytes = process_poster_without_image(poster)

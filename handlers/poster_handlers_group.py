@@ -1,0 +1,115 @@
+from balethon import conditions
+from balethon.objects import Message
+
+import config
+import keyboards
+import texts
+from database import Database
+from services.ai import get_title_with_ai
+from services.general import (
+    is_template_exist,
+    download_photo_as_bytes,
+    generate_template_grid,
+    get_poster_type,
+    define_text_color,
+)
+from services.visualize import process_poster, process_poster_without_image
+
+
+def poster_handlers_group(bot):
+    @bot.on_message(conditions.at_state("MODE-SELECTION") & conditions.regex("^تولید عکس‌نوشت دسته‌ای$"))
+    async def mode_selection_state(message: Message):
+        await message.reply(
+            texts.type_selection, reply_markup=keyboards.type_selection_menu
+        )
+        message.author.set_state("TYPE-SELECTION-GROUP")
+
+    @bot.on_message(conditions.at_state("TYPE-SELECTION-GROUP") & conditions.regex("^کارت‌پستال"))
+    async def type_selection_state2(message: Message):
+        if not is_template_exist():
+            await message.reply("هیچ طرحی موجود نیست.")
+            return
+
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster.template = config.POSTCARD_TEMPLATE_PATH
+        Database.save_poster(poster)
+
+        template_grid = generate_template_grid(image_dir=config.POSTCARD_TEMPLATE_PATH)
+        await message.reply_photo(photo=template_grid)
+
+        await message.reply(
+            texts.template_selection, reply_markup=keyboards.generate_template_keyboard(config.POSTCARD_TEMPLATE_PATH)
+        )
+        message.author.set_state("TEMPLATE-SELECTION2-GROUP")
+
+    @bot.on_message(conditions.at_state("TYPE-SELECTION-GROUP") & conditions.regex("^دعوت‌نامه"))
+    async def type_selection_state3(message: Message):
+        if not is_template_exist():
+            await message.reply("هیچ طرحی موجود نیست.")
+            return
+
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster.template = config.INVITATION_TEMPLATE_PATH
+        Database.save_poster(poster)
+
+        template_grid = generate_template_grid(image_dir=config.INVITATION_TEMPLATE_PATH)
+        await message.reply_photo(photo=template_grid)
+
+        await message.reply(
+            texts.template_selection, reply_markup=keyboards.generate_template_keyboard(config.INVITATION_TEMPLATE_PATH)
+        )
+        message.author.set_state("TEMPLATE-SELECTION2-GROUP")    
+
+
+    @bot.on_message(conditions.at_state("TEMPLATE-SELECTION2-GROUP"))
+    async def template_selection_state2(message: Message):
+        template_name = message.text.split()[-1]
+
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster.template = f'{poster.template}/{template_name}'
+        Database.save_poster(poster)
+
+        poster_type = get_poster_type(poster.template)
+        await message.reply(texts.generate_heading2_message(poster_type))
+        message.author.set_state("HEADING1-GROUP")
+
+    @bot.on_message(conditions.at_state("HEADING1-GROUP"))
+    async def heading1_state1(message: Message):
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster.message_text = message.text
+        Database.save_poster(poster)
+
+        poster_type = get_poster_type(poster.template)
+        await message.reply(texts.generate_group_heading1_message(poster_type))
+        message.author.set_state("FINAL-STATE-GROUP")
+
+    @bot.on_message(conditions.at_state("FINAL-STATE-GROUP"))
+    async def poster_generation_state(message: Message):
+        if message.text != "تایید عنوان پیش‌فرض":
+            heading2 = message.text
+            
+            poster = Database.load_posters_by_user(user_id=message.author.id)
+            poster.title = heading2
+
+        if poster.initial_image:
+            photo_file = await message.client.get_file(poster.initial_image)
+            photo_bytes = await download_photo_as_bytes(photo_file.path)
+
+        if get_poster_type(poster.template) != "basic":
+            poster.text_color = define_text_color(poster.template)
+        try:
+            if get_poster_type(poster.template) == "basic":
+                final_bytes = process_poster(poster, photo_bytes)
+            else:
+                final_bytes = process_poster_without_image(poster)
+
+            uploaded_photo = await message.reply_photo(final_bytes)
+            await message.reply_document(
+                final_bytes, texts.completed_poster, reply_markup=keyboards.main_menu
+            )
+            message.author.set_state("MAIN")
+
+            poster.output_image = uploaded_photo.photo[-1].id
+            Database.save_poster(poster)
+        except Exception as e:
+            await message.reply(texts.error.format(error_msg=str(e)))

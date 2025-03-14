@@ -121,7 +121,8 @@ def poster_handlers(bot):
 
         poster_type = get_poster_type(poster.template)
         await message.reply(texts.generate_heading2_message(poster_type))
-        message.author.set_state("HEADING1-BASIC")
+        # message.author.set_state("HEADING1-BASIC")
+        message.author.set_state("HEADING1")
 
     @bot.on_message(conditions.at_state("HEADING1"))
     async def heading1_state1(message: Message):

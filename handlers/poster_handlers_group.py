@@ -20,7 +20,7 @@ def poster_handlers_group(bot):
     @bot.on_message(conditions.at_state("MODE-SELECTION") & conditions.regex("^تولید عکس‌نوشت دسته‌ای$"))
     async def mode_selection_state(message: Message):
         await message.reply(
-            texts.type_selection, reply_markup=keyboards.type_selection_menu
+            texts.type_selection, reply_markup=keyboards.type_selection_group_menu
         )
         message.author.set_state("TYPE-SELECTION-GROUP")
 
@@ -86,30 +86,34 @@ def poster_handlers_group(bot):
     @bot.on_message(conditions.at_state("FINAL-STATE-GROUP"))
     async def poster_generation_state(message: Message):
         if message.text != "تایید عنوان پیش‌فرض":
-            heading2 = message.text
+            heading2_path = message.document[-1].id            
+            excel_file = await message.client.get_file(heading2_path)
+            await message.reply_document(excel_file)
             
-            poster = Database.load_posters_by_user(user_id=message.author.id)
-            poster.title = heading2
+            # poster = Database.load_posters_by_user(user_id=message.author.id)
+            # poster.title = heading2
 
-        if poster.initial_image:
-            photo_file = await message.client.get_file(poster.initial_image)
-            photo_bytes = await download_photo_as_bytes(photo_file.path)
+        
 
-        if get_poster_type(poster.template) != "basic":
-            poster.text_color = define_text_color(poster.template)
-        try:
-            if get_poster_type(poster.template) == "basic":
-                final_bytes = process_poster(poster, photo_bytes)
-            else:
-                final_bytes = process_poster_without_image(poster)
+        # if poster.initial_image:
+        #     photo_file = await message.client.get_file(poster.initial_image)
+        #     photo_bytes = await download_photo_as_bytes(photo_file.path)
 
-            uploaded_photo = await message.reply_photo(final_bytes)
-            await message.reply_document(
-                final_bytes, texts.completed_poster, reply_markup=keyboards.main_menu
-            )
-            message.author.set_state("MAIN")
+        # if get_poster_type(poster.template) != "basic":
+        #     poster.text_color = define_text_color(poster.template)
+        # try:
+        #     if get_poster_type(poster.template) == "basic":
+        #         final_bytes = process_poster(poster, photo_bytes)
+        #     else:
+        #         final_bytes = process_poster_without_image(poster)
 
-            poster.output_image = uploaded_photo.photo[-1].id
-            Database.save_poster(poster)
-        except Exception as e:
-            await message.reply(texts.error.format(error_msg=str(e)))
+        #     uploaded_photo = await message.reply_photo(final_bytes)
+        #     await message.reply_document(
+        #         final_bytes, texts.completed_poster, reply_markup=keyboards.main_menu
+        #     )
+        #     message.author.set_state("MAIN")
+
+        #     poster.output_image = uploaded_photo.photo[-1].id
+        #     Database.save_poster(poster)
+        # except Exception as e:
+        #     await message.reply(texts.error.format(error_msg=str(e)))

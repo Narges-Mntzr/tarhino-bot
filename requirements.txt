@@ -1,6 +1,7 @@
 balethon
 google-genai
 requests
+dnspython==2.7.0
 numpy==1.26.0           
 opencv-python==4.8.1.78  
 Pillow==10.3.0

@@ -55,6 +55,12 @@ type_selection_menu = ReplyKeyboard(
     ["بازگشت به منو"],
 )
 
+type_selection_group_menu = ReplyKeyboard(
+    ["کارت‌پستال"],
+    ["دعوت‌نامه"],
+    ["بازگشت به منو"],
+)
+
 places = ReplyKeyboard(*[[dept] for dept in config.PLACES], ["بازگشت به منو"])
 
 sub_places = {

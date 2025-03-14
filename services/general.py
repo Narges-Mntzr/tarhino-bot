@@ -7,7 +7,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from config import SUPPORTED_POSTER_TYPES
 
-from visualize import replace_colors, read_colors_from_file
+from services.visualize import replace_colors, read_colors_from_file
 
 
 def convert_persian_to_english_digits(text: str) -> str:

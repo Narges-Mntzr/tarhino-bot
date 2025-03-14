@@ -5,7 +5,7 @@ import texts
 import keyboards
 from config import logging
 from database import Database
-from services import (
+from services.general import (
     convert_persian_to_english_digits,
     get_full_name,
     is_valid_phone_number,

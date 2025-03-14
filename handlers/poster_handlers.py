@@ -5,14 +5,15 @@ import config
 import keyboards
 import texts
 from database import Database
-from services import (
+from services.ai import get_title_with_ai
+from services.general import (
     is_template_exist,
     download_photo_as_bytes,
     generate_template_grid,
     get_poster_type,
-    define_text_color
+    define_text_color,
 )
-from visualize import process_poster, process_poster_without_image
+from services.visualize import process_poster, process_poster_without_image
 
 
 def poster_handlers(bot):
@@ -119,33 +120,47 @@ def poster_handlers(bot):
         Database.save_poster(poster)
 
         poster_type = get_poster_type(poster.template)
-        await message.reply(texts.generate_heading1_message(poster_type))
-        message.author.set_state("HEADING1")
+        await message.reply(texts.generate_heading2_message(poster_type))
+        message.author.set_state("HEADING1-BASIC")
 
     @bot.on_message(conditions.at_state("HEADING1"))
-    async def heading1_state(message: Message):
-        heading1 = message.text
-        # if len(heading1.split()) > 10:
+    async def heading1_state1(message: Message):
+        # if len(heading1.split()) > 20:
         #     await message.reply(texts.not_valid_length)
         #     return
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
-        poster.title = message.text
+        poster.message_text = message.text
         Database.save_poster(poster)
 
         poster_type = get_poster_type(poster.template)
-        await message.reply(texts.generate_heading2_message(poster_type))
+        await message.reply(texts.generate_heading1_message(poster_type))
+        message.author.set_state("FINAL-STATE")
+
+    @bot.on_message(conditions.at_state("HEADING1-BASIC"))
+    async def heading1_state2(message: Message):
+        ai_title = get_title_with_ai(message.poster.message_text)
+
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster.message_text = message.text
+        poster.title = ai_title
+        Database.save_poster(poster)
+
+        await message.reply(
+            texts.heading1_message_with_default.format(title=ai_title),
+            reply_markup=keyboards.default_title,
+        )
         message.author.set_state("FINAL-STATE")
 
     @bot.on_message(conditions.at_state("FINAL-STATE"))
     async def poster_generation_state(message: Message):
-        heading2 = message.text
-        # if len(heading2.split()) > 20:
-        #     await message.reply(texts.not_valid_length)
-        #     return
-
-        poster = Database.load_posters_by_user(user_id=message.author.id)
-        poster.message_text = heading2
+        if message.text != "تایید عنوان پیش‌فرض":
+            heading2 = message.text
+            # if len(heading2.split()) > 10:
+            #     await message.reply(texts.not_valid_length)
+            #     return
+            poster = Database.load_posters_by_user(user_id=message.author.id)
+            poster.title = heading2
 
         if poster.initial_image:
             photo_file = await message.client.get_file(poster.initial_image)

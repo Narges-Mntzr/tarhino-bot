@@ -22,6 +22,7 @@ load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 POSTGRES_HOST = os.getenv("POSTGRES_HOST")
 POSTGRES_PASS = os.getenv("POSTGRES_PASS")
+GEMINI_API_TOKEN = os.getenv("GEMINI_API_TOKEN")
 
 PLACES = {
     "کارت تبریک": [

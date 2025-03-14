@@ -4,7 +4,7 @@ from balethon.objects import Message
 import config
 import texts
 import keyboards
-from services import (
+from services.general import (
     generate_image_grid,
     convert_persian_to_english_digits,
     image_to_bytes,

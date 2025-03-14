@@ -1,6 +1,6 @@
 from balethon.objects import ReplyKeyboard
 import config
-from services import get_all_template_names, convert_english_to_persian_digits
+from services.general import get_all_template_names, convert_english_to_persian_digits
 
 
 before_register = ReplyKeyboard(
@@ -68,10 +68,11 @@ orientation_menu = ReplyKeyboard(
     ["بازگشت به منو"],
 )
 
+
 def generate_template_keyboard(path):
     return ReplyKeyboard(
-    *[[f"طرح {name}"] for name in get_all_template_names(path)], ["بازگشت به منو"])
-
+        *[[f"طرح {name}"] for name in get_all_template_names(path)], ["بازگشت به منو"]
+    )
 
 
 def generate_image_keyboard(n, prefix):
@@ -85,3 +86,8 @@ def generate_image_keyboard(n, prefix):
 
 
 default = ReplyKeyboard(["مقدار پیش‌فرض"])
+
+default_title = ReplyKeyboard(
+    ["تایید عنوان پیش‌فرض"],
+    ["بازگشت به منو"],
+)

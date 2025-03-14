@@ -4,7 +4,7 @@ from balethon.objects import Message
 import texts
 import keyboards
 from database import Database
-from services import (
+from services.general import (
     generate_color_palette,
     is_valid_hex_color,
 )

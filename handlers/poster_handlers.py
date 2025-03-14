@@ -99,7 +99,7 @@ def poster_handlers(bot):
         Database.save_poster(poster)
 
         poster_type = get_poster_type(poster.template)
-        await message.reply(texts.generate_heading1_message(poster_type))
+        await message.reply(texts.generate_heading2_message(poster_type))
         message.author.set_state("HEADING1")
 
 
@@ -139,7 +139,7 @@ def poster_handlers(bot):
 
     @bot.on_message(conditions.at_state("HEADING1-BASIC"))
     async def heading1_state2(message: Message):
-        ai_title = get_title_with_ai(message.poster.message_text)
+        ai_title = get_title_with_ai(message.text)
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.message_text = message.text

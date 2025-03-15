@@ -5,15 +5,11 @@ import config
 import keyboards
 import texts
 from database import Database
-from services.ai import get_title_with_ai
 from services.general import (
     is_template_exist,
-    download_photo_as_bytes,
     generate_template_grid,
     get_poster_type,
-    define_text_color,
 )
-from services.visualize import process_poster, process_poster_without_image
 
 
 def poster_handlers_group(bot):

@@ -189,7 +189,9 @@ def generate_image_grid(image_dir, max_images_per_page=8, columns=2):
     return image_bytes.getvalue(), len(image_files)
 
 
-def generate_template_grid(image_dir, new_colors=None, max_images_per_page=8, columns=2):
+def generate_template_grid(
+    image_dir, new_colors=None, max_images_per_page=8, columns=2
+):
     image_files = [
         f for f in os.listdir(image_dir) if os.path.isdir(os.path.join(image_dir, f))
     ]
@@ -225,7 +227,9 @@ def generate_template_grid(image_dir, new_colors=None, max_images_per_page=8, co
             if new_colors:
                 color_path = os.path.join(image_dir, f"{image_file}/colors.txt")
                 old_colors = read_colors_from_file(color_path)
-                modified_image = replace_colors(template_image_path, old_colors, new_colors)
+                modified_image = replace_colors(
+                    template_image_path, old_colors, new_colors
+                )
 
                 img = Image.fromarray(cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB))
             else:
@@ -288,6 +292,7 @@ def get_full_name(first_name: str = "", last_name: str = "") -> str:
     elif first_name or last_name:
         return first_name or last_name
     return ""
+
 
 def get_poster_type(template):
     template = template.lower()

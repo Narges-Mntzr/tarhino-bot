@@ -112,7 +112,7 @@ def poster_handlers_group(bot):
             await message.reply(
                 texts.template_selection,
                 reply_markup=keyboards.generate_template_keyboard(
-                    poster.template.split("/")[0]
+                    poster.template[: -1 * (len(poster.template.split("/")[-1]) + 1)]
                 ),
             )
             message.author.set_state("TEMPLATE-SELECTION2-GROUP")

@@ -5,8 +5,9 @@ import config
 import texts
 import keyboards
 from services.general import (
-    generate_image_grid,
     convert_persian_to_english_digits,
+    generate_image_grid,
+    get_place,
     image_to_bytes,
 )
 
@@ -45,8 +46,10 @@ def image_places_handlers(bot):
     @bot.on_message(conditions.at_state("IMAGE_SUB_PLACES"))
     async def image_sub_place_state(message: Message):
         if message.text.startswith("بازگشت به دسته"):
-            rest_of_string = message.text[len("بازگشت به دسته "):]
-            await message.reply(texts.places, keyboards.sub_places[rest_of_string])
+            rest_of_string = message.text[len("بازگشت به دسته ") :]
+            await message.reply(
+                texts.places, keyboards.sub_places[get_place(rest_of_string)]
+            )
             message.author.set_state("SUB_PLACES")
             return
 

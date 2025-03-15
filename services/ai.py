@@ -20,5 +20,5 @@ def get_title_with_ai(message_text: str):
 
         responce = llm.invoke(messages)
         return responce.content
-    except:
+    except Exception:
         return None

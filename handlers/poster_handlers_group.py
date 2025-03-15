@@ -10,6 +10,7 @@ from services.general import (
     generate_template_grid,
     get_poster_type,
 )
+from services.visualize import process_poster_without_image
 
 
 def poster_handlers_group(bot):
@@ -80,7 +81,9 @@ def poster_handlers_group(bot):
         Database.save_poster(poster)
 
         poster_type = get_poster_type(poster.template)
-        await message.reply(texts.generate_heading2_message(poster_type))
+        await message.reply(
+            texts.generate_heading2_message(poster_type), keyboards.return_menu
+        )
         message.author.set_state("HEADING1-GROUP")
 
     @bot.on_message(conditions.at_state("HEADING1-GROUP"))
@@ -96,34 +99,19 @@ def poster_handlers_group(bot):
     @bot.on_message(conditions.at_state("FINAL-STATE-GROUP"))
     async def poster_generation_state(message: Message):
         poster = Database.load_posters_by_user(user_id=message.author.id)
-        heading2_path = message.document[-1].id
-        config.logging.error(f"{heading2_path=}")
-        poster.title = heading2_path
+        names = message.text.split("-")
+
+        for name in names:
+            poster.title = name
+
+            final_bytes = process_poster_without_image(poster)
+
+            uploaded_photo = await message.reply_photo(final_bytes)
+            await message.reply_document(
+                final_bytes, texts.completed_poster, reply_markup=keyboards.main_menu
+            )
+
+            poster.output_image = uploaded_photo.photo[-1].id
+
         Database.save_poster(poster)
-
-        excel_file = await message.client.get_file(heading2_path)
-        config.logging.error(f"{excel_file=}")
-        await message.reply_document(excel_file)
-
-        # if poster.initial_image:
-        #     photo_file = await message.client.get_file(poster.initial_image)
-        #     photo_bytes = await download_photo_as_bytes(photo_file.path)
-
-        # if get_poster_type(poster.template) != "basic":
-        #     poster.text_color = define_text_color(poster.template)
-        # try:
-        #     if get_poster_type(poster.template) == "basic":
-        #         final_bytes = process_poster(poster, photo_bytes)
-        #     else:
-        #         final_bytes = process_poster_without_image(poster)
-
-        #     uploaded_photo = await message.reply_photo(final_bytes)
-        #     await message.reply_document(
-        #         final_bytes, texts.completed_poster, reply_markup=keyboards.main_menu
-        #     )
-        #     message.author.set_state("MAIN")
-
-        #     poster.output_image = uploaded_photo.photo[-1].id
-        #     Database.save_poster(poster)
-        # except Exception as e:
-        #     await message.reply(texts.error.format(error_msg=str(e)))
+        message.author.set_state("MAIN")

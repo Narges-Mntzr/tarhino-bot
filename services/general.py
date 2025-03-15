@@ -308,3 +308,11 @@ def define_text_color(template):
     colors = read_colors_from_file(color_path)
     if poster_type != "basic":
         return colors[0]
+
+
+def get_place(sub_place: str):
+    for place, sub_places in config.PLACES.items():
+        if sub_place in sub_places:
+            return place
+
+    return ""

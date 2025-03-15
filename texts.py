@@ -149,9 +149,9 @@ def generate_heading1_message(poster_type):
 
 def generate_group_heading1_message(poster_type):
     if poster_type == "postcard":
-        return "لیست اسامی گیرندگان کارت‌پستال را بصورت یک فایل اکسل وارد کنید: "
+        return "لیست اسامی گیرندگان کارت‌پستال را در یک پیام وارد کنید. (هر دو اسم را با - از هم جدا کنین): "
     if poster_type == "invitation":
-        return "لیست اسامی گیرندگان دعوت‌نامه را بصورت یک فایل اکسل وارد کنید: "
+        return "لیست اسامی گیرندگان دعوت‌نامه را در یک پیام وارد کنید. (هر دو اسم را با - از هم جدا کنین): "
 
 
 def generate_heading2_message(poster_type):

@@ -160,12 +160,13 @@ def poster_handlers(bot):
 
     @bot.on_message(conditions.at_state("FINAL-STATE"))
     async def poster_generation_state(message: Message):
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+
         if message.text != "تایید عنوان پیش‌فرض":
             heading2 = message.text
             # if len(heading2.split()) > 10:
             #     await message.reply(texts.not_valid_length)
             #     return
-            poster = Database.load_posters_by_user(user_id=message.author.id)
             poster.title = heading2
 
         if poster.initial_image:

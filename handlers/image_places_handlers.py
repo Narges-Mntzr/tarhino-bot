@@ -17,6 +17,7 @@ def image_places_handlers(bot):
         if message.text == "بازگشت به مرحله قبل":
             await message.reply(texts.start_message, keyboards.start_menu)
             message.author.set_state("START")
+            return
 
         await message.reply(texts.places, keyboards.sub_places[message.text])
         message.author.set_state("SUB_PLACES")
@@ -26,6 +27,7 @@ def image_places_handlers(bot):
         if message.text == "بازگشت به مرحله قبل":
             await message.reply(texts.places, keyboards.places)
             message.author.set_state("PLACE")
+            return
 
         place_path = config.PLACES_PATH_MAPPING.get(message.text)
         if not place_path:
@@ -43,9 +45,10 @@ def image_places_handlers(bot):
     @bot.on_message(conditions.at_state("IMAGE_SUB_PLACES"))
     async def image_sub_place_state(message: Message):
         if message.text.startswith("بازگشت به دسته"):
-            rest_of_string = message.text[len("بازگشت به دسته ") + 1 :]
+            rest_of_string = message.text[len("بازگشت به دسته "):]
             await message.reply(texts.places, keyboards.sub_places[rest_of_string])
             message.author.set_state("SUB_PLACES")
+            return
 
         place_name, img_name = message.text.split("-")
         place_path = config.PLACES_PATH_MAPPING.get(place_name[:-1])

@@ -24,12 +24,22 @@ def poster_handlers(bot):
         )
         message.author.set_state("MODE-SELECTION")
 
-    @bot.on_message(conditions.at_state("MODE-SELECTION") & conditions.regex("^تولید عکس‌نوشت تکی$"))
-    async def mode_selection_state(message: Message):
+    @bot.on_message(
+        conditions.at_state("MODE-SELECTION") & conditions.regex("^تولید عکس‌نوشت تکی$")
+    )
+    async def mode_selection_state1(message: Message):
         await message.reply(
             texts.type_selection, reply_markup=keyboards.type_selection_menu
         )
         message.author.set_state("TYPE-SELECTION")
+
+    @bot.on_message(
+        conditions.at_state("MODE-SELECTION")
+        & conditions.regex("^بازگشت به مرحله قبل$")
+    )
+    async def mode_selection_state2(message: Message):
+        await message.reply(texts.start_message, keyboards.start_menu)
+        message.author.set_state("START")
 
     @bot.on_message(conditions.at_state("TYPE-SELECTION") & conditions.regex("^ساده"))
     async def type_selection_state1(message: Message):
@@ -89,7 +99,6 @@ def poster_handlers(bot):
         )
         message.author.set_state("TEMPLATE-SELECTION2")    
 
-
     @bot.on_message(conditions.at_state("TEMPLATE-SELECTION2"))
     async def template_selection_state2(message: Message):
         template_name = message.text.split()[-1]
@@ -101,7 +110,6 @@ def poster_handlers(bot):
         poster_type = get_poster_type(poster.template)
         await message.reply(texts.generate_heading2_message(poster_type),keyboards.return_menu)
         message.author.set_state("HEADING1")
-
 
     @bot.on_message(conditions.at_state("TEMPLATE-SELECTION"))
     async def template_selection_state(message: Message):

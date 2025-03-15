@@ -90,6 +90,7 @@ def poster_handlers_group(bot):
                 texts.type_selection, reply_markup=keyboards.type_selection_group_menu
             )
             message.author.set_state("TYPE-SELECTION-GROUP")
+            return
 
         template_name = message.text.split()[-1]
 
@@ -115,6 +116,7 @@ def poster_handlers_group(bot):
                 ),
             )
             message.author.set_state("TEMPLATE-SELECTION2-GROUP")
+            return
 
         poster.message_text = message.text
         Database.save_poster(poster)
@@ -133,6 +135,7 @@ def poster_handlers_group(bot):
                 texts.generate_heading2_message(poster_type), keyboards.return_menu
             )
             message.author.set_state("HEADING1-GROUP")
+            return
 
         names = message.text.split("-")
         for name in names:

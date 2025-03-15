@@ -121,8 +121,7 @@ def poster_handlers(bot):
 
         poster_type = get_poster_type(poster.template)
         await message.reply(texts.generate_heading2_message(poster_type))
-        # message.author.set_state("HEADING1-BASIC")
-        message.author.set_state("HEADING1")
+        message.author.set_state("HEADING1-BASIC")
 
     @bot.on_message(conditions.at_state("HEADING1"))
     async def heading1_state1(message: Message):
@@ -144,13 +143,19 @@ def poster_handlers(bot):
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.message_text = message.text
-        poster.title = ai_title
+        if ai_title:
+            poster.title = ai_title
         Database.save_poster(poster)
 
-        await message.reply(
-            texts.heading1_message_with_default.format(title=ai_title),
-            reply_markup=keyboards.default_title,
-        )
+        if ai_title:
+            await message.reply(
+                texts.heading1_message_with_default.format(title=ai_title),
+                reply_markup=keyboards.default_title,
+            )
+        else:
+            poster_type = get_poster_type(poster.template)
+            await message.reply(texts.generate_heading1_message(poster_type))
+
         message.author.set_state("FINAL-STATE")
 
     @bot.on_message(conditions.at_state("FINAL-STATE"))
@@ -184,4 +189,6 @@ def poster_handlers(bot):
             poster.output_image = uploaded_photo.photo[-1].id
             Database.save_poster(poster)
         except Exception as e:
-            await message.reply(texts.error.format(error_msg=str(e)))
+            await message.reply(
+                texts.error.format(error_msg=str(e)), reply_markup=keyboards.return_menu
+            )

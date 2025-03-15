@@ -1,12 +1,24 @@
-from google import genai
-from config import GEMINI_API_TOKEN
+from config import AVAL_API_TOKEN
+from langchain_openai import ChatOpenAI
 
-client = genai.Client(api_key=GEMINI_API_TOKEN)
+model_name = "gpt-4o-mini"
+
+llm = ChatOpenAI(
+    model=model_name, base_url="https://api.avalapis.ir/v1", api_key=AVAL_API_TOKEN
+)
 
 
 def get_title_with_ai(message_text: str):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=f"یک عنوان خلاقانه فارسی بین ۱ تا ۸ کلمه برای این متن بده. فقط عنوان را در پاسخ بنویس. یدون هیچ کاراکتر اضافه: {message_text}",
-    )
-    return response.text
+    try:
+        messages = [
+            {"role": "system", "content": "You are a helpful persian assistant."},
+            {
+                "role": "user",
+                "content": f"یک عنوان خلاقانه فارسی بین ۱ تا ۵ کلمه برای این متن بده. فقط عنوان را در پاسخ بنویس. یدون هیچ کاراکتر اضافه: {message_text}",
+            },
+        ]
+
+        responce = llm.invoke(messages)
+        return responce.content
+    except:
+        return None

@@ -26,6 +26,16 @@ def poster_handlers_group(bot):
         message.author.set_state("TYPE-SELECTION-GROUP")
 
     @bot.on_message(
+        conditions.at_state("TYPE-SELECTION-GROUP")
+        & conditions.regex("^بازگشت به مرحله قبل")
+    )
+    async def type_selection_state1(message: Message):
+        await message.reply(
+            texts.mode_selection, reply_markup=keyboards.mode_selection_menu
+        )
+        message.author.set_state("MODE-SELECTION")
+
+    @bot.on_message(
         conditions.at_state("TYPE-SELECTION-GROUP") & conditions.regex("^کارت‌پستال")
     )
     async def type_selection_state2(message: Message):
@@ -75,6 +85,12 @@ def poster_handlers_group(bot):
 
     @bot.on_message(conditions.at_state("TEMPLATE-SELECTION2-GROUP"))
     async def template_selection_state2(message: Message):
+        if message.text == "بازگشت به مرحله قبل":
+            await message.reply(
+                texts.type_selection, reply_markup=keyboards.type_selection_group_menu
+            )
+            message.author.set_state("TYPE-SELECTION-GROUP")
+
         template_name = message.text.split()[-1]
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
@@ -90,6 +106,16 @@ def poster_handlers_group(bot):
     @bot.on_message(conditions.at_state("HEADING1-GROUP"))
     async def heading1_state1(message: Message):
         poster = Database.load_posters_by_user(user_id=message.author.id)
+
+        if message.text == "بازگشت به مرحله قبل":
+            await message.reply(
+                texts.template_selection,
+                reply_markup=keyboards.generate_template_keyboard(
+                    poster.template.split("/")[0]
+                ),
+            )
+            message.author.set_state("TEMPLATE-SELECTION2-GROUP")
+
         poster.message_text = message.text
         Database.save_poster(poster)
 
@@ -100,8 +126,15 @@ def poster_handlers_group(bot):
     @bot.on_message(conditions.at_state("FINAL-STATE-GROUP"))
     async def poster_generation_state(message: Message):
         poster = Database.load_posters_by_user(user_id=message.author.id)
-        names = message.text.split("-")
 
+        if message.text == "بازگشت به مرحله قبل":
+            poster_type = get_poster_type(poster.template)
+            await message.reply(
+                texts.generate_heading2_message(poster_type), keyboards.return_menu
+            )
+            message.author.set_state("HEADING1-GROUP")
+
+        names = message.text.split("-")
         for name in names:
             poster.title = name
 

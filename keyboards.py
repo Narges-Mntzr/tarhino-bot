@@ -91,7 +91,7 @@ def generate_image_keyboard(n, prefix):
             [f"{prefix} - عکس {convert_english_to_persian_digits(str(i + 1))}"]
             for i in range(n)
         ],
-        ["بازگشت به مرحله قبل"],
+        [f"بازگشت به دسته {prefix}"],
         ["بازگشت به منو"],
     )
 

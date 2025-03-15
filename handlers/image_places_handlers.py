@@ -42,8 +42,9 @@ def image_places_handlers(bot):
 
     @bot.on_message(conditions.at_state("IMAGE_SUB_PLACES"))
     async def image_sub_place_state(message: Message):
-        if message.text == "بازگشت به مرحله قبل":
-            await message.reply(texts.places, keyboards.sub_places[message.text])
+        if message.text.startswith("بازگشت به دسته"):
+            rest_of_string = message.text[len("بازگشت به دسته ") + 1 :]
+            await message.reply(texts.places, keyboards.sub_places[rest_of_string])
             message.author.set_state("SUB_PLACES")
 
         place_name, img_name = message.text.split("-")

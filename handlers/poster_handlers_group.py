@@ -13,14 +13,19 @@ from services.general import (
 
 
 def poster_handlers_group(bot):
-    @bot.on_message(conditions.at_state("MODE-SELECTION") & conditions.regex("^تولید عکس‌نوشت دسته‌ای$"))
+    @bot.on_message(
+        conditions.at_state("MODE-SELECTION")
+        & conditions.regex("^تولید عکس‌نوشت دسته‌ای$")
+    )
     async def mode_selection_state(message: Message):
         await message.reply(
             texts.type_selection, reply_markup=keyboards.type_selection_group_menu
         )
         message.author.set_state("TYPE-SELECTION-GROUP")
 
-    @bot.on_message(conditions.at_state("TYPE-SELECTION-GROUP") & conditions.regex("^کارت‌پستال"))
+    @bot.on_message(
+        conditions.at_state("TYPE-SELECTION-GROUP") & conditions.regex("^کارت‌پستال")
+    )
     async def type_selection_state2(message: Message):
         if not is_template_exist():
             await message.reply("هیچ طرحی موجود نیست.")
@@ -34,11 +39,16 @@ def poster_handlers_group(bot):
         await message.reply_photo(photo=template_grid)
 
         await message.reply(
-            texts.template_selection, reply_markup=keyboards.generate_template_keyboard(config.POSTCARD_TEMPLATE_PATH)
+            texts.template_selection,
+            reply_markup=keyboards.generate_template_keyboard(
+                config.POSTCARD_TEMPLATE_PATH
+            ),
         )
         message.author.set_state("TEMPLATE-SELECTION2-GROUP")
 
-    @bot.on_message(conditions.at_state("TYPE-SELECTION-GROUP") & conditions.regex("^دعوت‌نامه"))
+    @bot.on_message(
+        conditions.at_state("TYPE-SELECTION-GROUP") & conditions.regex("^دعوت‌نامه")
+    )
     async def type_selection_state3(message: Message):
         if not is_template_exist():
             await message.reply("هیچ طرحی موجود نیست.")
@@ -48,21 +58,25 @@ def poster_handlers_group(bot):
         poster.template = config.INVITATION_TEMPLATE_PATH
         Database.save_poster(poster)
 
-        template_grid = generate_template_grid(image_dir=config.INVITATION_TEMPLATE_PATH)
+        template_grid = generate_template_grid(
+            image_dir=config.INVITATION_TEMPLATE_PATH
+        )
         await message.reply_photo(photo=template_grid)
 
         await message.reply(
-            texts.template_selection, reply_markup=keyboards.generate_template_keyboard(config.INVITATION_TEMPLATE_PATH)
+            texts.template_selection,
+            reply_markup=keyboards.generate_template_keyboard(
+                config.INVITATION_TEMPLATE_PATH
+            ),
         )
-        message.author.set_state("TEMPLATE-SELECTION2-GROUP")    
-
+        message.author.set_state("TEMPLATE-SELECTION2-GROUP")
 
     @bot.on_message(conditions.at_state("TEMPLATE-SELECTION2-GROUP"))
     async def template_selection_state2(message: Message):
         template_name = message.text.split()[-1]
 
         poster = Database.load_posters_by_user(user_id=message.author.id)
-        poster.template = f'{poster.template}/{template_name}'
+        poster.template = f"{poster.template}/{template_name}"
         Database.save_poster(poster)
 
         poster_type = get_poster_type(poster.template)
@@ -81,15 +95,15 @@ def poster_handlers_group(bot):
 
     @bot.on_message(conditions.at_state("FINAL-STATE-GROUP"))
     async def poster_generation_state(message: Message):
-        if message.text != "تایید عنوان پیش‌فرض":
-            heading2_path = message.document[-1].id            
-            excel_file = await message.client.get_file(heading2_path)
-            await message.reply_document(excel_file)
-            
-            # poster = Database.load_posters_by_user(user_id=message.author.id)
-            # poster.title = heading2
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        heading2_path = message.document[-1].id
+        config.logging.error(f"{heading2_path=}")
+        poster.title = heading2_path
+        Database.save_poster(poster)
 
-        
+        excel_file = await message.client.get_file(heading2_path)
+        config.logging.error(f"{excel_file=}")
+        await message.reply_document(excel_file)
 
         # if poster.initial_image:
         #     photo_file = await message.client.get_file(poster.initial_image)

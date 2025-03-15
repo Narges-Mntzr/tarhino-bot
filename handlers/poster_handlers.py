@@ -99,7 +99,7 @@ def poster_handlers(bot):
         Database.save_poster(poster)
 
         poster_type = get_poster_type(poster.template)
-        await message.reply(texts.generate_heading2_message(poster_type))
+        await message.reply(texts.generate_heading2_message(poster_type),keyboards.return_menu)
         message.author.set_state("HEADING1")
 
 

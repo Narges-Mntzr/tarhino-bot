@@ -6,9 +6,10 @@ import keyboards
 import texts
 from database import Database
 from services.general import (
-    is_template_exist,
+    define_text_color,
     generate_template_grid,
     get_poster_type,
+    is_template_exist,
 )
 from services.visualize import process_poster_without_image
 
@@ -104,6 +105,7 @@ def poster_handlers_group(bot):
         for name in names:
             poster.title = name
 
+            poster.text_color = define_text_color(poster.template)
             final_bytes = process_poster_without_image(poster)
 
             uploaded_photo = await message.reply_photo(final_bytes)

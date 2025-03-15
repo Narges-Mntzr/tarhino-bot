@@ -14,11 +14,19 @@ from services.general import (
 def image_places_handlers(bot):
     @bot.on_message(conditions.at_state("PLACE"))
     async def place_state(message: Message):
+        if message.text == "بازگشت به مرحله قبل":
+            await message.reply(texts.start_message, keyboards.start_menu)
+            message.author.set_state("START")
+
         await message.reply(texts.places, keyboards.sub_places[message.text])
         message.author.set_state("SUB_PLACES")
 
     @bot.on_message(conditions.at_state("SUB_PLACES"))
     async def sub_place_state(message: Message):
+        if message.text == "بازگشت به مرحله قبل":
+            await message.reply(texts.places, keyboards.places)
+            message.author.set_state("PLACE")
+
         place_path = config.PLACES_PATH_MAPPING.get(message.text)
         if not place_path:
             await message.reply(texts.invalid_value)
@@ -34,6 +42,10 @@ def image_places_handlers(bot):
 
     @bot.on_message(conditions.at_state("IMAGE_SUB_PLACES"))
     async def image_sub_place_state(message: Message):
+        if message.text == "بازگشت به مرحله قبل":
+            await message.reply(texts.places, keyboards.sub_places[message.text])
+            message.author.set_state("SUB_PLACES")
+
         place_name, img_name = message.text.split("-")
         place_path = config.PLACES_PATH_MAPPING.get(place_name[:-1])
         english_image = convert_persian_to_english_digits(img_name[1:])

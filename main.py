@@ -45,6 +45,11 @@ async def main2_state(message: Message):
     message.author.set_state("SETTING")
 
 
+@bot.on_message(conditions.at_state("MAIN") & conditions.regex("^پشتیبانی$"))
+async def main3_state(message: Message):
+    await message.reply(texts.support)
+
+
 @bot.on_message(conditions.at_state("START") & conditions.regex("^گنجینه تصاویر$"))
 async def start_image_state(message: Message):
     await message.reply(texts.places, keyboards.places)
@@ -57,7 +62,9 @@ async def setting3_state(message: Message):
     message.author.set_state("MAIN")
 
 
-@bot.on_message(conditions.at_state(None) & ~conditions.regex("^(شروع|تنظیمات اکانت)$"))
+@bot.on_message(
+    conditions.at_state(None) & ~conditions.regex("^(شروع|تنظیمات اکانت|پشتیبانی)$")
+)
 async def none_state(message: Message):
     await message.reply(texts.none_state, keyboards.main_menu)
     message.author.set_state("MAIN")

@@ -1,4 +1,4 @@
-# HAMDAST BOT
+# Tarhino BOT
 A bot for the Bale messaging app that takes the title and image of a news item and turns it into a poster.
 
 ### ADDRESSES

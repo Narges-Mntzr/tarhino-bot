@@ -28,9 +28,10 @@ def validate_text(text, poster_type):
 
         else:
             return False
-        
-    except:
+
+    except Exception:
         return True
+
 
 def validate_title(title, poster_type):
     try:
@@ -53,5 +54,5 @@ def validate_title(title, poster_type):
 
         else:
             return False
-    except:
+    except Exception:
         return True

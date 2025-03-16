@@ -1,4 +1,4 @@
-Balethon
+git+https://github.com/Balethon/Balethon.git
 langchain_openai==0.3.8
 numpy==1.26.0           
 opencv-python==4.8.1.78  

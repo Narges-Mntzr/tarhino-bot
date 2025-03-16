@@ -14,7 +14,7 @@ from services.general import (
     define_text_color,
 )
 from services.visualize import process_poster, process_poster_without_image
-
+from validator import validate_text, validate_title
 
 def poster_handlers(bot):
     @bot.on_message(conditions.at_state("START") & conditions.regex("^عکس نوشت$"))
@@ -187,10 +187,10 @@ def poster_handlers(bot):
             message.author.set_state("TEMPLATE-SELECTION2")
             return
 
-        # if len(heading1.split()) > 20:
-        #     await message.reply(texts.not_valid_length)
-        #     return
-
+        if not validate_text(message.text, poster_type):
+            await message.reply(texts.not_valid_length) 
+            return
+            
         poster.message_text = message.text
         Database.save_poster(poster)
 
@@ -241,10 +241,10 @@ def poster_handlers(bot):
             return
 
         if message.text != "تایید عنوان پیش‌فرض":
+            if not validate_title(message.text, poster_type):
+                await message.reply(texts.not_valid_length) 
+                return
             heading2 = message.text
-            # if len(heading2.split()) > 10:
-            #     await message.reply(texts.not_valid_length)
-            #     return
             poster.title = heading2
 
         if poster.initial_image:

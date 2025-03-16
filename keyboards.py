@@ -37,6 +37,7 @@ color_menu = ReplyKeyboard(
     ["رنگ فرعی"],
     ["رنگ متن"],
     ["بازگشت به مرحله قبل"],
+    ["بازگشت به منو"],
 )
 
 start_menu = ReplyKeyboard(
@@ -46,6 +47,9 @@ start_menu = ReplyKeyboard(
 )
 
 return_menu = ReplyKeyboard(["بازگشت به مرحله قبل"], ["بازگشت به منو"])
+
+pre_step = ReplyKeyboard(["بازگشت به مرحله قبل"])
+
 
 mode_selection_menu = ReplyKeyboard(
     ["تولید عکس‌نوشت تکی"],

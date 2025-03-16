@@ -41,15 +41,19 @@ def register_handlers(bot):
         )
         Database.save_user(user)
 
-        if user.phone_number is None:
-            await message.reply(texts.give_phone_number)
-            message.author.set_state("PHONE_NUMBER")
-        else:
-            await message.reply(texts.main_menu, keyboards.main_menu)
-            message.author.set_state("MAIN")
+        await message.reply(texts.give_phone_number, keyboards.pre_step)
+        message.author.set_state("PHONE_NUMBER")
 
     @bot.on_message(conditions.at_state("PHONE_NUMBER"))
     async def phone_number_state(message: Message):
+        if message.text == "بازگشت به مرحله قبل":
+            if message.author.first_name or message.author.last_name:
+                await message.reply(texts.give_name, keyboards.default)
+            else:
+                await message.reply(texts.give_name, ReplyKeyboardRemove())
+            message.author.set_state("NAME")
+            return
+
         normalized_number = convert_persian_to_english_digits(message.text)
 
         if not is_valid_phone_number(normalized_number):

@@ -35,3 +35,4 @@ A bot for the Bale messaging app that takes the title and image of a news item a
 - [ ] اطلاعات پوستگرس را ببریم روی دیسک
 - [ ] اضافه کردن محدودیت های طول متن ها
 - [ ] درست ذخیره کردن پوسترها
+- [ ] چک کردن مناسب بودن فرمت عکس ارسالی

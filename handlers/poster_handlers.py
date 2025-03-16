@@ -186,11 +186,11 @@ def poster_handlers(bot):
             )
             message.author.set_state("TEMPLATE-SELECTION2")
             return
-
+            
         if not validate_text(message.text, poster_type):
             await message.reply(texts.not_valid_length) 
             return
-            
+                
         poster.message_text = message.text
         Database.save_poster(poster)
 
@@ -207,6 +207,10 @@ def poster_handlers(bot):
 
         ai_title = get_title_with_ai(message.text)
 
+        if not validate_text(message.text, poster_type):
+            await message.reply(texts.not_valid_length) 
+            return
+        
         poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.message_text = message.text
         if ai_title:

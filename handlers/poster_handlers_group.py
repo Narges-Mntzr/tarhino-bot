@@ -108,6 +108,7 @@ def poster_handlers_group(bot):
     @bot.on_message(conditions.at_state("HEADING1-GROUP"))
     async def heading1_state1(message: Message):
         poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster_type = get_poster_type(poster.template)
 
         if message.text == "بازگشت به مرحله قبل":
             template_path = poster.template[
@@ -129,16 +130,15 @@ def poster_handlers_group(bot):
         poster.message_text = message.text
         Database.save_poster(poster)
 
-        poster_type = get_poster_type(poster.template)
         await message.reply(texts.generate_group_heading1_message(poster_type))
         message.author.set_state("FINAL-STATE-GROUP")
 
     @bot.on_message(conditions.at_state("FINAL-STATE-GROUP"))
     async def poster_generation_state(message: Message):
         poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster_type = get_poster_type(poster.template)
 
         if message.text == "بازگشت به مرحله قبل":
-            poster_type = get_poster_type(poster.template)
             await message.reply(
                 texts.generate_heading2_message(poster_type), keyboards.return_menu
             )

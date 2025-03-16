@@ -1,5 +1,5 @@
 from balethon import conditions
-from balethon.objects import Message, InlineKeyboard, InlineKeyboardButton
+from balethon.objects import Message, InlineKeyboard, InlineKeyboardButton, WebAppInfo
 
 import texts
 import keyboards
@@ -48,8 +48,8 @@ def setting_handlers(bot):
     async def color_color1_state(message: Message):
         await message.reply(
             texts.calculate_color,
-            reply_markup=InlineKeyboard(
-                [InlineKeyboardButton("تشخیص کد رنگی", web_app="https://ircolor.ir/")]
+            InlineKeyboard(
+                [InlineKeyboardButton("تشخیص کد رنگی", web_app=WebAppInfo(url="https://ircolor.ir/"))]
             ),
         )
         await message.reply(

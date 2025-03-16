@@ -1,6 +1,10 @@
 from balethon.objects import ReplyKeyboard
 import config
-from services.general import get_all_template_names, convert_english_to_persian_digits
+from services.general import (
+    get_all_template_names,
+    get_place,
+    convert_english_to_persian_digits,
+)
 
 
 before_register = ReplyKeyboard(
@@ -91,7 +95,7 @@ def generate_image_keyboard(n, prefix):
             [f"{prefix} - عکس {convert_english_to_persian_digits(str(i + 1))}"]
             for i in range(n)
         ],
-        [f"بازگشت به دسته {prefix}"],
+        [f"بازگشت به دسته {get_place(prefix)}"],
         ["بازگشت به منو"],
     )
 

@@ -109,11 +109,14 @@ def poster_handlers_group(bot):
         poster = Database.load_posters_by_user(user_id=message.author.id)
 
         if message.text == "بازگشت به مرحله قبل":
+            template_path = poster.template[
+                : -1 * (len(poster.template.split("/")[-1]) + 1)
+            ]
+            template_grid = generate_template_grid(image_dir=template_path)
+            await message.reply_photo(photo=template_grid)
             await message.reply(
                 texts.template_selection,
-                reply_markup=keyboards.generate_template_keyboard(
-                    poster.template[: -1 * (len(poster.template.split("/")[-1]) + 1)]
-                ),
+                reply_markup=keyboards.generate_template_keyboard(template_path),
             )
             message.author.set_state("TEMPLATE-SELECTION2-GROUP")
             return

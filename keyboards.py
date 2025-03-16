@@ -15,8 +15,8 @@ before_register = ReplyKeyboard(
 main_menu = ReplyKeyboard(
     ["شروع"],
     # TODO: ["فایل‌های من"],
-    ["پشتیبانی"],
     ["تنظیمات اکانت"],
+    ["پشتیبانی"],
 )
 
 setting_menu = ReplyKeyboard(

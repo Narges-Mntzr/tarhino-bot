@@ -1,4 +1,4 @@
-Balethon==1.0.1
+Balethon
 langchain_openai==0.3.8
 numpy==1.26.0           
 opencv-python==4.8.1.78  

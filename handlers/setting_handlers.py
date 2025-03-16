@@ -47,12 +47,13 @@ def setting_handlers(bot):
     )
     async def color_color1_state(message: Message):
         await message.reply(
-            texts.give_color.format(color_name=message.text), keyboards.return_menu
-        )
-        await message.reply(
+            texts.calculate_color,
             reply_markup=InlineKeyboard(
                 [InlineKeyboardButton("تشخیص کد رنگی", web_app="https://ircolor.ir/")]
-            )
+            ),
+        )
+        await message.reply(
+            texts.give_color.format(color_name=message.text), keyboards.return_menu
         )
 
         if message.text == "رنگ اصلی":

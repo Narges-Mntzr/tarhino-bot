@@ -147,11 +147,7 @@ def poster_handlers_group(bot):
 
         names = message.text.split("-")
         for name in names:
-            if not validate_title(name, poster_type):
-                await message.reply(texts.not_valid_length) 
-                continue
             poster.title = name
-
             poster.text_color = define_text_color(poster.template)
             final_bytes = process_poster_without_image(poster)
 

@@ -205,11 +205,11 @@ def poster_handlers(bot):
             message.author.set_state("INITIAL-IMAGE")
             return
 
-        ai_title = get_title_with_ai(message.text)
-
         if not validate_text(message.text, poster_type):
             await message.reply(texts.not_valid_length) 
             return
+        
+        ai_title = get_title_with_ai(message.text)
         
         poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.message_text = message.text

@@ -12,6 +12,7 @@ from services.general import (
     is_template_exist,
 )
 from services.visualize import process_poster_without_image
+from validator import validate_text, validate_title
 
 
 def poster_handlers_group(bot):
@@ -121,6 +122,10 @@ def poster_handlers_group(bot):
             message.author.set_state("TEMPLATE-SELECTION2-GROUP")
             return
 
+        if not validate_text(message.text, poster_type):
+            await message.reply(texts.not_valid_length) 
+            return
+        
         poster.message_text = message.text
         Database.save_poster(poster)
 
@@ -142,6 +147,9 @@ def poster_handlers_group(bot):
 
         names = message.text.split("-")
         for name in names:
+            if not validate_title(name, poster_type):
+                await message.reply(texts.not_valid_length) 
+                continue
             poster.title = name
 
             poster.text_color = define_text_color(poster.template)

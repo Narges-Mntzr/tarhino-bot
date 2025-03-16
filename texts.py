@@ -165,6 +165,6 @@ def generate_heading2_message(poster_type):
     if poster_type == "basic":
         return "متن اصلی را وارد کنید: (حداکثر ۲۰ کلمه)"
     if poster_type == "postcard":
-        return " متن کارت‌پستال را وارد کنید: "
+        return " متن کارت‌پستال را وارد کنید: (حداکثر یک پاراگراف)"
     if poster_type == "invitation":
-        return " متن دعوت‌نامه را وارد کنید: "
+        return " متن دعوت‌نامه را وارد کنید: (حداکثر دو پاراگراف)"

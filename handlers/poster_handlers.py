@@ -59,7 +59,7 @@ def poster_handlers(bot):
         await message.reply_photo(photo=template_grid)
 
         await message.reply(
-            texts.template_selection, reply_markup=keyboards.generate_template_keyboard(config.BASIC_TEMPLATE_PATH)
+            texts.basic_template_selection, reply_markup=keyboards.generate_template_keyboard(config.BASIC_TEMPLATE_PATH)
         )
         message.author.set_state("TEMPLATE-SELECTION")
 

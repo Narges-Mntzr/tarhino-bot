@@ -173,6 +173,7 @@ def poster_handlers(bot):
     @bot.on_message(conditions.at_state("HEADING1"))
     async def heading1_state1(message: Message):
         poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster_type = get_poster_type(poster.template)
 
         if message.text == "بازگشت به مرحله قبل":
             template_path = poster.template[
@@ -194,12 +195,14 @@ def poster_handlers(bot):
         poster.message_text = message.text
         Database.save_poster(poster)
 
-        poster_type = get_poster_type(poster.template)
         await message.reply(texts.generate_heading1_message(poster_type))
         message.author.set_state("FINAL-STATE")
 
     @bot.on_message(conditions.at_state("HEADING1-BASIC"))
     async def heading1_state2(message: Message):
+        poster = Database.load_posters_by_user(user_id=message.author.id)
+        poster_type = get_poster_type(poster.template)
+        
         if message.text == "بازگشت به مرحله قبل":
             await message.reply(texts.initial_image, reply_markup=keyboards.return_menu)
             message.author.set_state("INITIAL-IMAGE")
@@ -211,7 +214,6 @@ def poster_handlers(bot):
         
         ai_title = get_title_with_ai(message.text)
         
-        poster = Database.load_posters_by_user(user_id=message.author.id)
         poster.message_text = message.text
         if ai_title:
             poster.title = ai_title
@@ -223,7 +225,6 @@ def poster_handlers(bot):
                 reply_markup=keyboards.default_title,
             )
         else:
-            poster_type = get_poster_type(poster.template)
             await message.reply(texts.generate_heading1_message(poster_type))
 
         message.author.set_state("FINAL-STATE")

@@ -20,9 +20,9 @@ Be creative and make great content without any design skills! 🚀
 
 ### TODO
 
-- [ ] حالت‌های غیر معتبر را بررسی و خطای مناسب با آن را ارسال کنیم.
-- [ ] اضافه کردن گزینه‌ فایل‌های من
-- [ ] اندازه فونت با توجه به تعداد کلمات مشخص بشود (اگر کلمات زیاد بود اندازه فونت کمتر شود)
-- [ ] ذخیره کردن همه‌ی پوسترهای ایجاد شده در دیتابیس (در حالت ایجاد پوسترهای دسته‌ای)
-- [ ] چک کردن فرمت عکس‌های ارسالی
-- [ ] افراد بتوانند تمپلیت جدید اضافه کنند.
+- [ ] Check for invalid states and return appropriate error messages.  
+- [ ] Add a “My Files” option.  
+- [ ] Adjust font size based on the number of words (reduce font size if there are too many words).  
+- [ ] Save all generated posters in the database (for batch poster creation).  
+- [ ] Validate the format of uploaded images.  
+- [ ] Allow users to add new templates.
